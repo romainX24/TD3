@@ -92,8 +92,8 @@ public class Hex implements Cloneable {
     if(1<=i && i<=n && 1<=j && j<=n){
       if(this.get(i, j).equals(Player.NOONE)){
         this.board[i][j]=this.currentPlayer();
-        this.currPlayer = this.otherPlayer(this.currentPlayer());
         maj(i, j);
+        this.currPlayer = this.otherPlayer(this.currentPlayer());
         return true;
       }
 
