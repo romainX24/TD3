@@ -71,11 +71,11 @@ public class Hex implements Cloneable {
       this.uf = new UnionFind((this.n+2)*(this.n+2));
       for(int i = 1;i<=this.n;i++){
         this.uf.union(convert(i, 0), convert(i+1, 0));
-        this.uf.union(convert(i, this.n + 2), convert(i+1, this.n+2));
+        this.uf.union(convert(i, this.n + 1), convert(i+1, this.n+1));
       }
       for(int j = 1;j<=this.n;j++){
         this.uf.union(convert(0, j), convert(0, j+1));
-        this.uf.union(convert(this.n+2, j), convert(this.n+2, j+1));
+        this.uf.union(convert(this.n+1, j), convert(this.n+1, j+1));
       }
   }
 
