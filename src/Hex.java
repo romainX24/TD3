@@ -20,7 +20,7 @@
 
 public class Hex implements Cloneable {
   private Player[][] board;
-  private Player currPlayer;
+  private Player currPlayer = Player.RED;
   private int n;
 
   enum Player {
