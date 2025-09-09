@@ -1,0 +1,81 @@
+/* Jeu de Hex
+   https://fr.wikipedia.org/wiki/Hex
+
+   grille n*n
+
+   cases jouables : (i,j) avec 1 <= i, j <= n
+
+   bords bleus (gauche et droite) : i=0 ou i=n+1, 1 <= j <= n
+   bords rouges (haut et bas) : 1 <= i <= n, j=0 ou j=n+1
+
+   note : les quatre coins n'ont pas de couleur
+
+   adjacence :      i,j-1   i+1,j-1
+
+                 i-1,j    i,j   i+1,j
+
+                    i-1,j+1    i,j+1
+
+*/
+
+public class Hex implements Cloneable {
+
+  enum Player {
+    NOONE, BLUE, RED
+  }
+
+
+  // crée un plateau vide de taille n*n
+  Hex(int n) {
+  }
+
+  // renvoie la couleur de la case i,j
+  Player get(int i, int j) {
+    return Player.NOONE;
+  }
+
+
+  // Met à jour le plateau après que le joueur avec le trait joue la case (i, j).
+  // Ne fait rien si le coup est illégal.
+  // Renvoie true si et seulement si le coup est légal.
+  boolean click(int i, int j) {
+    return false;
+  }
+
+  // Renvoie le joueur avec le trait ou Player.NOONE si le jeu est terminé par
+  // la victoire d'un joueur.
+  Player currentPlayer() {
+    return Player.NOONE;
+  }
+
+
+  // Renvoie le joueur gagnant, ou Player.NOONE si aucun joueur n'est encore
+  // gagnant
+  Player winner() {
+    return Player.NOONE;
+  }
+
+  int label(int i, int j) {
+    return 0;
+  }
+
+  // Joue un coup aléatoire pour le joueur ayant le trait, met à jour l'état
+  // du jeu comme un clic sur une case, et renvoie true si un coup a été joué
+  // (false si la partie est terminée ou s'il n'existe plus de coup légal).
+  boolean randomMove() {
+    return false;
+  }
+
+  // Joue un coup pour le joueur ayant le trait en s'appuyant sur une
+  // simulation heuristique (playout) pour choisir ce coup. Met à jour l'état
+  // du jeu comme un clic et renvoie true si un coup a été joué (false sinon).
+  boolean heuristicMove() {
+    return false;
+  }
+
+
+
+  public static void main(String[] args) {
+    HexGUI.createAndShowGUI();
+  }
+}
