@@ -19,6 +19,7 @@
 */
 
 public class Hex implements Cloneable {
+  private Player[][] board;
 
   enum Player {
     NOONE, BLUE, RED
@@ -27,11 +28,28 @@ public class Hex implements Cloneable {
 
   // crée un plateau vide de taille n*n
   Hex(int n) {
+    this.board = new Player[n+2][n+2];
+    for(int i = 0; i<=n+1;i++){
+      for(int j = 0; j<=n+1;j++){
+        if(i==0||i==n+1){
+          this.board[i][j]=Player.BLUE;
+        }
+        if(j==0||j==n+1){
+          this.board[i][j]=Player.RED;
+        }    
+        this.board[i][j]=Player.NOONE;
+      }
+    }
+    this.board[0][0]=Player.NOONE;
+    this.board[n+1][n+1]=Player.NOONE;
+    this.board[0][n+1]=Player.NOONE;
+    this.board[n+1][0]=Player.NOONE;
+
   }
 
   // renvoie la couleur de la case i,j
   Player get(int i, int j) {
-    return Player.NOONE;
+    return this.board[i][j];
   }
 
 
