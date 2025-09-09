@@ -93,7 +93,7 @@ public class Hex implements Cloneable {
   // Renvoie true si et seulement si le coup est légal.
   boolean click(int i, int j) {
     if(1<=i && i<=n && 1<=j && j<=n){
-      if(this.get(i, j).equals(Player.NOONE)){
+      if(this.get(i, j).equals(Player.NOONE)&& this.winner().equals(Player.NOONE)){
         this.board[i][j]=this.currentPlayer();
         maj(i, j);
         this.currPlayer = this.otherPlayer(this.currentPlayer());
