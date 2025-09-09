@@ -20,9 +20,20 @@
 
 public class Hex implements Cloneable {
   private Player[][] board;
+  private Player currPlayer;
+  private int n = board.length;
 
   enum Player {
     NOONE, BLUE, RED
+  }
+
+  Player otherPlayer(Player p){
+    if(p.equals(Player.BLUE)){
+      return Player.RED;
+    }
+    else{
+      return Player.BLUE;
+    }
   }
 
 
@@ -60,13 +71,21 @@ public class Hex implements Cloneable {
   // Ne fait rien si le coup est illégal.
   // Renvoie true si et seulement si le coup est légal.
   boolean click(int i, int j) {
+    if(1<=i && i<=n && 1<=j && j<=n){
+      if(this.get(i, j).equals(this.currentPlayer())){
+        this.board[i][j]=this.currentPlayer();
+        this.currPlayer = this.otherPlayer(this.currentPlayer());
+        return true;
+      }
+      
+    }
     return false;
   }
 
   // Renvoie le joueur avec le trait ou Player.NOONE si le jeu est terminé par
   // la victoire d'un joueur.
   Player currentPlayer() {
-    return Player.NOONE;
+    return currPlayer;
   }
 
 
