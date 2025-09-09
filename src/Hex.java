@@ -102,7 +102,7 @@ public class Hex implements Cloneable {
   }
 
   int label(int i, int j) {
-    return 0;
+    return i+(this.n+2)*j;
   }
 
   // Joue un coup aléatoire pour le joueur ayant le trait, met à jour l'état
