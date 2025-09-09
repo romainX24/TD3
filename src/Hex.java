@@ -34,10 +34,13 @@ public class Hex implements Cloneable {
         if(i==0||i==n+1){
           this.board[i][j]=Player.BLUE;
         }
-        if(j==0||j==n+1){
+        else if(j==0||j==n+1){
           this.board[i][j]=Player.RED;
+        }
+        else{
+          this.board[i][j]=Player.NOONE;
         }    
-        this.board[i][j]=Player.NOONE;
+
       }
     }
     this.board[0][0]=Player.NOONE;
