@@ -21,7 +21,7 @@
 public class Hex implements Cloneable {
   private Player[][] board;
   private Player currPlayer;
-  private int n = board.length;
+  private int n;
 
   enum Player {
     NOONE, BLUE, RED
@@ -58,6 +58,7 @@ public class Hex implements Cloneable {
     this.board[n+1][n+1]=Player.NOONE;
     this.board[0][n+1]=Player.NOONE;
     this.board[n+1][0]=Player.NOONE;
+    this.n=n;
 
   }
 
@@ -77,7 +78,7 @@ public class Hex implements Cloneable {
         this.currPlayer = this.otherPlayer(this.currentPlayer());
         return true;
       }
-      
+
     }
     return false;
   }
