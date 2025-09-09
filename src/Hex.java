@@ -22,6 +22,7 @@ public class Hex implements Cloneable {
   private Player[][] board;
   private Player currPlayer = Player.RED;
   private int n;
+  private Player winner;
 
   enum Player {
     NOONE, BLUE, RED
@@ -59,6 +60,7 @@ public class Hex implements Cloneable {
     this.board[0][n+1]=Player.NOONE;
     this.board[n+1][0]=Player.NOONE;
     this.n=n;
+    this.winner=Player.NOONE;
 
   }
 
@@ -86,7 +88,10 @@ public class Hex implements Cloneable {
   // Renvoie le joueur avec le trait ou Player.NOONE si le jeu est terminé par
   // la victoire d'un joueur.
   Player currentPlayer() {
-    return currPlayer;
+    if(this.winner.equals(Player.NOONE)){
+      return currPlayer;
+    }
+    return this.winner;
   }
 
 
