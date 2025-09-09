@@ -127,17 +127,25 @@ public class Hex implements Cloneable {
   // Renvoie le joueur avec le trait ou Player.NOONE si le jeu est terminé par
   // la victoire d'un joueur.
   Player currentPlayer() {
-    if(this.winner.equals(Player.NOONE)){
+    if(this.winner().equals(Player.NOONE)){
       return currPlayer;
     }
-    return this.winner;
+    return this.winner();
   }
 
 
   // Renvoie le joueur gagnant, ou Player.NOONE si aucun joueur n'est encore
   // gagnant
   Player winner() {
-    return Player.NOONE;
+    if(uf.sameClass(1, convert(1, this.n+1))){
+      return Player.RED;
+    }
+    else if(uf.sameClass(n+2, convert(this.n+1, 1))){
+      return Player.BLUE;
+    }
+    else{
+      return Player.NOONE;
+    }
   }
 
   int convert(int i, int j){
