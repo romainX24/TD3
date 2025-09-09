@@ -33,8 +33,11 @@ public class Hex implements Cloneable {
     if(p.equals(Player.BLUE)){
       return Player.RED;
     }
-    else{
+    else if(p.equals(Player.RED)){
       return Player.BLUE;
+    }
+    else{
+      return Player.NOONE;
     }
   }
 
@@ -130,7 +133,7 @@ public class Hex implements Cloneable {
     if(this.winner().equals(Player.NOONE)){
       return currPlayer;
     }
-    return this.winner();
+    return Player.NOONE;
   }
 
 
