@@ -23,6 +23,7 @@ public class Hex implements Cloneable {
   private Player currPlayer = Player.RED;
   private int n;
   private Player winner;
+  private UnionFind uf;
 
   enum Player {
     NOONE, BLUE, RED
@@ -41,6 +42,7 @@ public class Hex implements Cloneable {
   // crée un plateau vide de taille n*n
   Hex(int n) {
     this.board = new Player[n+2][n+2];
+    
     for(int i = 0; i<=n+1;i++){
       for(int j = 0; j<=n+1;j++){
         if(i==0||i==n+1){
@@ -61,7 +63,20 @@ public class Hex implements Cloneable {
     this.board[n+1][0]=Player.NOONE;
     this.n=n;
     this.winner=Player.NOONE;
+    initialisUf();
+    
+  }
 
+  void initialisUf(){
+      this.uf = new UnionFind((this.n+2)*(this.n+2));
+      for(int i = 1;i<=this.n;i++){
+        this.uf.union(convert(i, 0), convert(i+1, 0));
+        this.uf.union(convert(i, this.n + 2), convert(i+1, this.n+2));
+      }
+      for(int j = 1;j<=this.n;j++){
+        this.uf.union(convert(0, j), convert(0, j+1));
+        this.uf.union(convert(this.n+2, j), convert(this.n+2, j+1));
+      }
   }
 
   // renvoie la couleur de la case i,j
@@ -78,11 +93,35 @@ public class Hex implements Cloneable {
       if(this.get(i, j).equals(Player.NOONE)){
         this.board[i][j]=this.currentPlayer();
         this.currPlayer = this.otherPlayer(this.currentPlayer());
+        maj(i, j);
         return true;
       }
 
     }
     return false;
+  }
+
+  void maj(int i, int j){
+    int c = convert(i, j);
+
+    if(board[i][j-1].equals(currPlayer)){
+      this.uf.union(convert(i,j-1), c);
+    }
+    if(board[i+1][j-1].equals(currPlayer)){
+      this.uf.union(convert(i+1,j-1), c);
+    }
+    if(board[i-1][j].equals(currPlayer)){
+      this.uf.union(convert(i-1,j), c);
+    }
+    if(board[i+1][j].equals(currPlayer)){
+      this.uf.union(convert(i+1,j), c);
+    }
+    if(board[i-1][j+1].equals(currPlayer)){
+      this.uf.union(convert(i-1,j+1), c);
+    }
+    if(board[i][j+1].equals(currPlayer)){
+      this.uf.union(convert(i,j+1), c);
+    }
   }
 
   // Renvoie le joueur avec le trait ou Player.NOONE si le jeu est terminé par
@@ -101,8 +140,12 @@ public class Hex implements Cloneable {
     return Player.NOONE;
   }
 
-  int label(int i, int j) {
+  int convert(int i, int j){
     return i+(this.n+2)*j;
+  }
+
+  int label(int i, int j) {
+    return uf.find(convert(i, j));
   }
 
   // Joue un coup aléatoire pour le joueur ayant le trait, met à jour l'état
