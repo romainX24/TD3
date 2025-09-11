@@ -24,6 +24,8 @@ public class Hex implements Cloneable {
   private int n;
   private Player winner;
   private UnionFind uf;
+  private int[] permutation;
+  private int permIndex = 0;
 
   enum Player {
     NOONE, BLUE, RED
@@ -67,6 +69,7 @@ public class Hex implements Cloneable {
     this.n=n;
     this.winner=Player.NOONE;
     initialisUf();
+    initialisePermutation();
     
   }
 
@@ -79,6 +82,19 @@ public class Hex implements Cloneable {
       for(int j = 1;j<this.n;j++){
         this.uf.union(convert(0, j), convert(0, j+1));
         this.uf.union(convert(this.n+1, j), convert(this.n+1, j+1));
+      }
+  }
+
+  void initialisePermutation(){
+      this.permutation = new int[(this.n+2)*(this.n+2)];
+      for(int i = 0; i < this.permutation.length; i++){
+          this.permutation[i] = i;
+      }
+      for(int i = 0; i < this.permutation.length; i++){
+          int j = (int)(Math.random()*this.permutation.length);
+          int temp = this.permutation[i];
+          this.permutation[i] = this.permutation[j];
+          this.permutation[j] = temp;
       }
   }
 
@@ -163,7 +179,19 @@ public class Hex implements Cloneable {
   // du jeu comme un clic sur une case, et renvoie true si un coup a été joué
   // (false si la partie est terminée ou s'il n'existe plus de coup légal).
   boolean randomMove() {
-    return false;
+    if(this.winner()!=Player.NOONE){
+      return false;
+    }
+    while(true){
+      int label = this.permutation[this.permIndex];
+      int i = label % (this.n+2);
+      int j = label / (this.n+2);
+      this.permIndex++;
+      this.permIndex%=this.permutation.length;
+      if (this.click(i, j)) {
+        return true;
+      }
+    }
   }
 
   // Joue un coup pour le joueur ayant le trait en s'appuyant sur une
