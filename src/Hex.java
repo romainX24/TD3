@@ -22,7 +22,6 @@ public class Hex implements Cloneable {
   private Player[][] board;
   private Player currPlayer = Player.RED;
   private int n;
-  private Player winner;
   private UnionFind uf;
   private int[] permutation;
   private int permIndex = 0;
@@ -67,7 +66,6 @@ public class Hex implements Cloneable {
     this.board[0][n+1]=Player.NOONE;
     this.board[n+1][0]=Player.NOONE;
     this.n=n;
-    this.winner=Player.NOONE;
     initialisUf();
     initialisePermutation();
     
