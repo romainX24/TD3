@@ -196,8 +196,51 @@ public class Hex implements Cloneable {
   // simulation heuristique (playout) pour choisir ce coup. Met à jour l'état
   // du jeu comme un clic et renvoie true si un coup a été joué (false sinon).
   boolean heuristicMove() {
+    int[] move = bestMove();
+    if(move[0]!=-1 && move[1]!=-1){
+      this.click(move[0], move[1]);
+      return true;
+    }
     return false;
   }
+
+  int[] bestMove(){
+    for(int i = 0; i<n+2; i++){
+      for(int j = 0; j<n+2; j++){
+        UnionFind ufCopy = (UnionFind) this.uf.clone();
+        Hex copie = new Hex(this.n, this.board, this.currPlayer, ufCopy, this.permutation, this.permIndex);
+        Player p = copie.currPlayer;
+        if(copie.click(i, j)){
+          if(copie.winner().equals(p)){
+            return new int[]{i, j};
+          }
+          else{
+            int[] move = copie.bestMove();
+            copie.click(move[0], move[1]);
+            return copie.bestMove();
+          }
+        }
+      }
+    }
+    //no winning move
+    return new int[]{-1, -1};
+
+  }
+
+  Hex(int n, Player[][] board, Player currPlayer, UnionFind uf, int[] permutation, int permIndex){
+    this.n = n;
+    this.board = new Player[n+2][n+2];
+    for(int i = 0; i < n+2; i++){
+      for(int j = 0; j < n+2; j++){
+        this.board[i][j] = board[i][j];
+      }
+    }
+    this.currPlayer = currPlayer;
+    this.uf = uf;
+    this.permutation = permutation;
+    this.permIndex = permIndex;
+  }
+
 
 
 
