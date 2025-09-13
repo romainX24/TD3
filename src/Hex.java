@@ -205,9 +205,14 @@ public class Hex implements Cloneable {
   }
 
   int[] bestMove() {
+    int[] firstAvailable = {-1, -1};
     for (int i = 1; i <= n; i++) {
       for (int j = 1; j <= n; j++) {
         if (this.get(i, j) == Player.NOONE) {
+          if (firstAvailable[0] == -1) {
+            firstAvailable[0] = i;
+            firstAvailable[1] = j;
+          }
           Hex copy = this.clone();
           if (copy.click(i, j)) {
             if (copy.winner() == this.currPlayer) {
@@ -217,7 +222,7 @@ public class Hex implements Cloneable {
         }
       }
     }
-    return new int[]{-1, -1};
+    return firstAvailable;
   }
 
   Hex(int n, Player[][] board, Player currPlayer, UnionFind uf, int[] permutation, int permIndex){
