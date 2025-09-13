@@ -25,6 +25,7 @@ public class Hex implements Cloneable {
   private UnionFind uf;
   private int[] permutation;
   private int permIndex = 0;
+  private int[] lastMove;
 
   enum Player {
     NOONE, BLUE, RED
@@ -111,6 +112,7 @@ public class Hex implements Cloneable {
         this.board[i][j]=this.currentPlayer();
         maj(i, j);
         this.currPlayer = this.otherPlayer(this.currentPlayer());
+        this.lastMove = new int[]{i, j};
         return true;
       }
 
@@ -205,26 +207,12 @@ public class Hex implements Cloneable {
   }
 
   int[] bestMove(){
-    for(int i = 0; i<n+2; i++){
-      for(int j = 0; j<n+2; j++){
-        UnionFind ufCopy = (UnionFind) this.uf.clone();
-        Hex copie = new Hex(this.n, this.board, this.currPlayer, ufCopy, this.permutation, this.permIndex);
-        Player p = copie.currPlayer;
-        if(copie.click(i, j)){
-          if(copie.winner().equals(p)){
-            return new int[]{i, j};
-          }
-          else{
-            int[] move = copie.bestMove();
-            copie.click(move[0], move[1]);
-            return copie.bestMove();
-          }
-        }
-      }
+    UnionFind ufCopy = (UnionFind) this.uf.clone();
+    Hex copie = new Hex(this.n, this.board, this.currPlayer, ufCopy, this.permutation, this.permIndex);
+    while(copie.winner().equals(Player.NOONE)){
+      copie.randomMove();
     }
-    //no winning move
-    return new int[]{-1, -1};
-
+    return copie.lastMove;
   }
 
   Hex(int n, Player[][] board, Player currPlayer, UnionFind uf, int[] permutation, int permIndex){

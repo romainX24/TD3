@@ -11,6 +11,16 @@ public class UnionFind {
     this.rank = new int[n];
     this.numClasses = n;
   }
+
+  public UnionFind clone(){
+    UnionFind ufClone = new UnionFind(this.link.length);
+    for(int i=0;i<this.link.length;i++){
+      ufClone.link[i]=this.link[i];
+      ufClone.rank[i]=this.rank[i];
+    }
+    ufClone.numClasses=this.numClasses;
+    return ufClone;
+  }
   
   public int numClasses() {
     return this.numClasses;
