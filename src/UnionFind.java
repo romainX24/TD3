@@ -1,4 +1,13 @@
 public class UnionFind {
+  public UnionFind clone() {
+    UnionFind copy = new UnionFind(this.link.length);
+    for (int i = 0; i < this.link.length; i++) {
+      copy.link[i] = this.link[i];
+      copy.rank[i] = this.rank[i];
+    }
+    copy.numClasses = this.numClasses;
+    return copy;
+  }
 
   private int[] link;
   private int[] rank;

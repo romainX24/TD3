@@ -204,27 +204,20 @@ public class Hex implements Cloneable {
     return false;
   }
 
-  int[] bestMove(){
-    for(int i = 0; i<n+2; i++){
-      for(int j = 0; j<n+2; j++){
-        UnionFind ufCopy = (UnionFind) this.uf.clone();
-        Hex copie = new Hex(this.n, this.board, this.currPlayer, ufCopy, this.permutation, this.permIndex);
-        Player p = copie.currPlayer;
-        if(copie.click(i, j)){
-          if(copie.winner().equals(p)){
-            return new int[]{i, j};
-          }
-          else{
-            int[] move = copie.bestMove();
-            copie.click(move[0], move[1]);
-            return copie.bestMove();
+  int[] bestMove() {
+    for (int i = 1; i <= n; i++) {
+      for (int j = 1; j <= n; j++) {
+        if (this.get(i, j) == Player.NOONE) {
+          Hex copy = this.clone();
+          if (copy.click(i, j)) {
+            if (copy.winner() == this.currPlayer) {
+              return new int[]{i, j};
+            }
           }
         }
       }
     }
-    //no winning move
     return new int[]{-1, -1};
-
   }
 
   Hex(int n, Player[][] board, Player currPlayer, UnionFind uf, int[] permutation, int permIndex){
@@ -236,9 +229,22 @@ public class Hex implements Cloneable {
       }
     }
     this.currPlayer = currPlayer;
-    this.uf = uf;
-    this.permutation = permutation;
+    this.uf = uf.clone(); // Ensure deep clone
+    this.permutation = permutation.clone(); // Ensure deep clone
     this.permIndex = permIndex;
+  }
+
+  @Override
+  public Hex clone() {
+    Player[][] newBoard = new Player[n+2][n+2];
+    for (int i = 0; i < n+2; i++) {
+      for (int j = 0; j < n+2; j++) {
+        newBoard[i][j] = this.board[i][j];
+      }
+    }
+    UnionFind newUf = this.uf.clone();
+    int[] newPermutation = this.permutation.clone();
+    return new Hex(n, newBoard, currPlayer, newUf, newPermutation, permIndex);
   }
 
 
