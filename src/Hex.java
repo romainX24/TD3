@@ -212,15 +212,17 @@ public class Hex implements Cloneable {
   int[] bestMove(Player player) {
     recursionDepth++;
     System.out.println("Recursion depth: " + recursionDepth);
-    int[] bestMove = {-1, -1};
-    boolean foundWinningMove = false;
     if (this.winner() != Player.NOONE) {
       recursionDepth--;
       return new int[]{-1, -1};
     }
+    boolean hasMove = false;
+    int[] bestMove = {-1, -1};
+    boolean foundWinningMove = false;
     for (int i = 1; i <= n; i++) {
       for (int j = 1; j <= n; j++) {
         if (this.get(i, j) == Player.NOONE) {
+          hasMove = true;
           Hex copy = this.clone();
           copy.currPlayer = player;
           if (copy.click(i, j)) {
@@ -250,6 +252,10 @@ public class Hex implements Cloneable {
       }
     }
     recursionDepth--;
+    if (!hasMove) {
+      // No moves left, board is full
+      return new int[]{-1, -1};
+    }
     if (foundWinningMove) {
       return bestMove;
     }
