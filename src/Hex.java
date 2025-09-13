@@ -19,6 +19,7 @@
 */
 
 public class Hex implements Cloneable {
+  private static int recursionDepth = 0;
   private Player[][] board;
   private Player currPlayer = Player.RED;
   private int n;
@@ -196,7 +197,7 @@ public class Hex implements Cloneable {
   // simulation heuristique (playout) pour choisir ce coup. Met à jour l'état
   // du jeu comme un clic et renvoie true si un coup a été joué (false sinon).
   boolean heuristicMove() {
-    int[] move = bestMove();
+  int[] move = bestMove(this.currPlayer);
     if(move[0]!=-1 && move[1]!=-1){
       this.click(move[0], move[1]);
       return true;
@@ -205,24 +206,62 @@ public class Hex implements Cloneable {
   }
 
   int[] bestMove() {
-    int[] firstAvailable = {-1, -1};
+    return bestMove(this.currPlayer);
+  }
+
+  int[] bestMove(Player player) {
+    recursionDepth++;
+    System.out.println("Recursion depth: " + recursionDepth);
+    int[] bestMove = {-1, -1};
+    boolean foundWinningMove = false;
+    if (this.winner() != Player.NOONE) {
+      recursionDepth--;
+      return new int[]{-1, -1};
+    }
     for (int i = 1; i <= n; i++) {
       for (int j = 1; j <= n; j++) {
         if (this.get(i, j) == Player.NOONE) {
-          if (firstAvailable[0] == -1) {
-            firstAvailable[0] = i;
-            firstAvailable[1] = j;
-          }
           Hex copy = this.clone();
+          copy.currPlayer = player;
           if (copy.click(i, j)) {
-            if (copy.winner() == this.currPlayer) {
+            if (copy.winner() == player) {
+              recursionDepth--;
               return new int[]{i, j};
+            }
+            // Recursively check opponent's best move
+            int[] oppMove = copy.bestMove(otherPlayer(player));
+            if (oppMove[0] == -1) {
+              // No moves left, so this is a draw or win
+              bestMove[0] = i;
+              bestMove[1] = j;
+              foundWinningMove = true;
+            } else {
+              Hex oppCopy = copy.clone();
+              oppCopy.currPlayer = otherPlayer(player);
+              oppCopy.click(oppMove[0], oppMove[1]);
+              if (oppCopy.winner() != otherPlayer(player)) {
+                bestMove[0] = i;
+                bestMove[1] = j;
+                foundWinningMove = true;
+              }
             }
           }
         }
       }
     }
-    return firstAvailable;
+    recursionDepth--;
+    if (foundWinningMove) {
+      return bestMove;
+    }
+    // If no good move found, return first available
+    for (int i = 1; i <= n; i++) {
+      for (int j = 1; j <= n; j++) {
+        if (this.get(i, j) == Player.NOONE) {
+          return new int[]{i, j};
+        }
+      }
+    }
+    return new int[]{-1, -1};
   }
 
   Hex(int n, Player[][] board, Player currPlayer, UnionFind uf, int[] permutation, int permIndex){
